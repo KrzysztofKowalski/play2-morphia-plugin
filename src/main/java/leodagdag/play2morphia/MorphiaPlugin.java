@@ -1,5 +1,23 @@
 package leodagdag.play2morphia;
 
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import leodagdag.play2morphia.utils.ConfigKey;
+import leodagdag.play2morphia.utils.Constants;
+import leodagdag.play2morphia.utils.MorphiaLogger;
+import leodagdag.play2morphia.utils.PlayCreator;
+import leodagdag.play2morphia.utils.StringUtils;
+import play.Application;
+import play.Configuration;
+import play.Plugin;
+import play.libs.Classpath;
+
 import com.github.jmkgreen.morphia.AbstractEntityInterceptor;
 import com.github.jmkgreen.morphia.Datastore;
 import com.github.jmkgreen.morphia.Morphia;
@@ -9,21 +27,12 @@ import com.github.jmkgreen.morphia.logging.MorphiaLoggerFactory;
 import com.github.jmkgreen.morphia.logging.slf4j.SLF4JLogrImplFactory;
 import com.github.jmkgreen.morphia.mapping.Mapper;
 import com.github.jmkgreen.morphia.validation.ValidationExtension;
-import com.mongodb.*;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.MongoException;
+import com.mongodb.ServerAddress;
 import com.mongodb.gridfs.GridFS;
-import leodagdag.play2morphia.utils.*;
-import play.Application;
-import play.Configuration;
-import play.Plugin;
-import play.libs.Classpath;
-
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
 public class MorphiaPlugin extends Plugin {
 
@@ -103,7 +112,7 @@ public class MorphiaPlugin extends Plugin {
             MorphiaLogger.debug("Datastore [%s] created", dbName);
             // Create GridFS
             String uploadCollection = morphiaConf.getString(ConfigKey.COLLECTION_UPLOADS.getKey());
-            if (StringUtils.isBlank(dbName)) {
+            if (StringUtils.isBlank(uploadCollection)) {
                 uploadCollection = "uploads";
                 MorphiaLogger.warn("Missing Morphia configuration key [%s]. Use default value instead [%s]", ConfigKey.COLLECTION_UPLOADS, "uploads");
             }
