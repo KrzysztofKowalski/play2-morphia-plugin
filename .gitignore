@@ -14,3 +14,4 @@ bin
 *.ipr
 *.iml
 *.iws
+atlassian-ide-plugin.xml
